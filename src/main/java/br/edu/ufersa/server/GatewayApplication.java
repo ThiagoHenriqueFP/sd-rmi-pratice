@@ -12,6 +12,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 public class GatewayApplication implements GatewayRemote {
@@ -80,5 +81,30 @@ public class GatewayApplication implements GatewayRemote {
     @Override
     public List<Car> getAllCars() throws RemoteException {
         return database.getAllCars();
+    }
+
+    @Override
+    public List<Car> searchCar(String model) {
+        return database.search(model);
+    }
+
+    @Override
+    public Optional<Car> searchCar(String model, String renavan) {
+        return database.search(model, renavan);
+    }
+
+    @Override
+    public Car update(Car car) {
+        return database.update(car);
+    }
+
+    @Override
+    public Integer carsInStock() {
+        return database.getAllCars().size();
+    }
+
+    @Override
+    public Optional<Car> buy(String model, String renavan) {
+        return database.buy(model, renavan);
     }
 }

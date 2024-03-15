@@ -37,4 +37,12 @@ public class Car implements Serializable {
     public Double getPrice() {
         return price;
     }
+
+    public void update(Car car) {
+        this.model = car.getModel();
+        this.renavan = car.getRenavan();
+        this.category = car.getCategory();
+        this.year = car.getYear();
+        this.price = car.getPrice();
+    }
 }

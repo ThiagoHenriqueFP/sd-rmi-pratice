@@ -6,6 +6,7 @@ import br.edu.ufersa.server.domain.CarCategory;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.Optional;
 
 public interface GatewayRemote extends Remote {
     boolean login(String username, String password) throws RemoteException;
@@ -14,9 +15,10 @@ public interface GatewayRemote extends Remote {
     boolean deleteCar(String model) throws RemoteException;
     List<Car> getCarsByCategory(CarCategory category) throws RemoteException;
     List<Car> getAllCars() throws RemoteException;
-//    Car searchCar(String key);
-//    Car update(Car car);
+    List<Car> searchCar(String model);
+    Optional<Car> searchCar(String model, String renavan);
+    Car update(Car car);
 //    void sendUpdates();
-//    void carsInStock();
-//    void buy(Car car);
+    Integer carsInStock();
+    Optional<Car> buy(String model, String renavan);
 }

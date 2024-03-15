@@ -6,6 +6,7 @@ import br.edu.ufersa.server.domain.CarCategory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 public class CarDatabase {
@@ -95,5 +96,49 @@ public class CarDatabase {
         }
 
         return list;
+    }
+
+    public List<Car> search(String model) {
+        if (database.containsKey(model)) {
+            return database.get(model);
+        }
+
+        return new ArrayList<>();
+    }
+
+    public Optional<Car> search(String model, String renavan) {
+        if (database.containsKey(model)) {
+            var cars = database.get(model);
+
+            return cars.stream().filter(it -> it.getRenavan().equals(renavan)).findFirst();
+        }
+
+        return Optional.empty();
+    }
+
+    public Car update(Car car) {
+        if (database.containsKey(car.getModel())) {
+            List<Car> cars = database.get(car.getModel());
+            Car saved = this.getCarFromlist(cars, car.getRenavan());
+            cars.remove(saved);
+            saved.update(car);
+            this.save(saved);
+            return saved;
+        }
+
+        return null;
+    }
+
+    public Optional<Car> buy(String model, String renavan) {
+        if (database.containsKey(model)) {
+            var cars = database.get(model);
+
+            var car = cars.stream().filter(it -> it.getRenavan().equals(renavan)).findFirst();
+            cars.remove(car.get());
+
+            return car;
+        }
+
+        return Optional.empty();
     }
 }
