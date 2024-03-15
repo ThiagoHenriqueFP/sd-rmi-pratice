@@ -2,6 +2,8 @@ package br.edu.ufersa.server;
 
 import br.edu.ufersa.auth.AuthApplication;
 import br.edu.ufersa.auth.AuthApplicationRemote;
+import br.edu.ufersa.server.domain.Car;
+import br.edu.ufersa.server.domain.CarCategory;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
@@ -9,10 +11,12 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class GatewayApplication implements GatewayRemote {
     private static final Logger logger = Logger.getLogger(GatewayApplication.class.getName());
+    private final CarDatabase database = new CarDatabase();
     private final AuthApplicationRemote authStub;
     public static GatewayApplication INSTANCE;
 
@@ -50,5 +54,31 @@ public class GatewayApplication implements GatewayRemote {
     public boolean login(String username, String password) throws RemoteException {
         logger.info("accessing auth application");
         return authStub.login(username, password);
+    }
+
+    @Override
+    public boolean createCar(String renavam, String name, CarCategory category, Integer fabrication, Double price) {
+        Car car = new Car(name, category, renavam, fabrication, price);
+
+        return database.save(car);
+    }
+
+    @Override
+    public boolean deleteCar(String model, String renavan) throws RemoteException {
+        return database.delete(model, renavan);
+    }
+    @Override
+    public boolean deleteCar(String model) throws RemoteException {
+        return database.delete(model);
+    }
+
+    @Override
+    public List<Car> getCarsByCategory(CarCategory category) throws RemoteException {
+        return database.getCarsByCategory(category);
+    }
+
+    @Override
+    public List<Car> getAllCars() throws RemoteException {
+        return database.getAllCars();
     }
 }

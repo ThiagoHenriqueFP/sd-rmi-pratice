@@ -16,4 +16,25 @@ public class Car implements Serializable {
         this.year = year;
         this.price = price;
     }
+
+
+    public String getModel() {
+        return model;
+    }
+
+    public String getRenavan() {
+        return renavan;
+    }
+
+    public CarCategory getCategory() {
+        return category;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
 }
