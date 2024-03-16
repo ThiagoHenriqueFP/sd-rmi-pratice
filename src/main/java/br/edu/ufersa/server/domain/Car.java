@@ -38,6 +38,27 @@ public class Car implements Serializable {
         return price;
     }
 
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public void setRenavan(String renavan) {
+        this.renavan = renavan;
+    }
+
+    public void setCategory(CarCategory category) {
+        this.category = category;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
     public void update(Car car) {
         this.model = car.getModel();
         this.renavan = car.getRenavan();
