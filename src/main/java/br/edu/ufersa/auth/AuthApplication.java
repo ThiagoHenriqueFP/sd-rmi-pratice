@@ -3,12 +3,14 @@ package br.edu.ufersa.auth;
 import br.edu.ufersa.auth.domain.User;
 import br.edu.ufersa.auth.domain.UserAuthorities;
 
+import javax.swing.*;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 public class AuthApplication implements AuthApplicationRemote{
@@ -40,19 +42,16 @@ public class AuthApplication implements AuthApplicationRemote{
         return INSTANCE;
     }
 
-    public boolean login(String username, String password) {
+    public Optional<User> login(String username, String password) {
         logger.info("checking database");
         User user = userDatabase.get(username);
 
-        if (user == null) {
-            logger.info("user not found");
-            return false;
-        } else if (!user.password().equals(password)) {
-            logger.info("credentials not matching");
-            return false;
+        if (user == null || !user.password().equals(password)) {
+            logger.info("user not found or credentials not matching");
+            return Optional.empty();
         }
 
-        return true;
+        return Optional.of(user);
     }
 
     public boolean create(String username, String password, UserAuthorities authorities) {

@@ -2,6 +2,7 @@ package br.edu.ufersa.server;
 
 import br.edu.ufersa.auth.AuthApplication;
 import br.edu.ufersa.auth.AuthApplicationRemote;
+import br.edu.ufersa.auth.domain.User;
 import br.edu.ufersa.server.domain.Car;
 import br.edu.ufersa.server.domain.CarCategory;
 
@@ -52,7 +53,7 @@ public class GatewayApplication implements GatewayRemote {
     }
 
     @Override
-    public boolean login(String username, String password) throws RemoteException {
+    public Optional<User> login(String username, String password) throws RemoteException {
         logger.info("accessing auth application");
         return authStub.login(username, password);
     }

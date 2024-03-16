@@ -1,5 +1,6 @@
 package br.edu.ufersa.server;
 
+import br.edu.ufersa.auth.domain.User;
 import br.edu.ufersa.server.domain.Car;
 import br.edu.ufersa.server.domain.CarCategory;
 
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface GatewayRemote extends Remote {
-    boolean login(String username, String password) throws RemoteException;
+    Optional<User> login(String username, String password) throws RemoteException;
     boolean createCar(String renavam, String model, CarCategory category, Integer fabrication, Double price) throws RemoteException;
     boolean deleteCar(String model, String renavan) throws RemoteException;
     boolean deleteCar(String model) throws RemoteException;
