@@ -1,8 +1,8 @@
-package br.edu.ufersa.server;
+package br.edu.ufersa.server.gateway;
 
-import br.edu.ufersa.auth.domain.User;
-import br.edu.ufersa.server.domain.Car;
-import br.edu.ufersa.server.domain.CarCategory;
+import br.edu.ufersa.server.auth.domain.User;
+import br.edu.ufersa.server.gateway.domain.Car;
+import br.edu.ufersa.server.gateway.domain.CarCategory;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

@@ -1,7 +1,7 @@
-package br.edu.ufersa.auth;
+package br.edu.ufersa.server.auth;
 
-import br.edu.ufersa.auth.domain.User;
-import br.edu.ufersa.auth.domain.UserAuthorities;
+import br.edu.ufersa.server.auth.domain.User;
+import br.edu.ufersa.server.auth.domain.UserAuthorities;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

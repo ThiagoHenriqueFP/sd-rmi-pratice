@@ -1,4 +1,4 @@
-package br.edu.ufersa.server.domain;
+package br.edu.ufersa.server.gateway.domain;
 
 import java.io.Serializable;
 

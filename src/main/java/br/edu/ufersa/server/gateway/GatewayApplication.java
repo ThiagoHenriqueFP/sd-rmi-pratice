@@ -1,10 +1,10 @@
-package br.edu.ufersa.server;
+package br.edu.ufersa.server.gateway;
 
-import br.edu.ufersa.auth.AuthApplication;
-import br.edu.ufersa.auth.AuthApplicationRemote;
-import br.edu.ufersa.auth.domain.User;
-import br.edu.ufersa.server.domain.Car;
-import br.edu.ufersa.server.domain.CarCategory;
+import br.edu.ufersa.server.auth.AuthApplication;
+import br.edu.ufersa.server.auth.AuthApplicationRemote;
+import br.edu.ufersa.server.auth.domain.User;
+import br.edu.ufersa.server.gateway.domain.Car;
+import br.edu.ufersa.server.gateway.domain.CarCategory;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;

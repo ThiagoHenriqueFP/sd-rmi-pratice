@@ -1,7 +1,7 @@
-package br.edu.ufersa.server;
+package br.edu.ufersa.server.gateway;
 
-import br.edu.ufersa.server.domain.Car;
-import br.edu.ufersa.server.domain.CarCategory;
+import br.edu.ufersa.server.gateway.domain.Car;
+import br.edu.ufersa.server.gateway.domain.CarCategory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +17,7 @@ public class CarDatabase {
         return list.stream().anyMatch(it -> it.getRenavan().equals(renavan));
     }
 
-    private Car getCarFromlist(List<Car> list, String renavan) {
+    private Car getCarFromList(List<Car> list, String renavan) {
         return list.stream().filter(it -> it.getRenavan().equals(renavan)).findFirst().get();
     }
 
@@ -54,7 +54,7 @@ public class CarDatabase {
         List<Car> list = database.get(model);
 
         if (this.renavanAlreadyExists(list, renavan)) {
-            list.remove(this.getCarFromlist(list, renavan));
+            list.remove(this.getCarFromList(list, renavan));
 
             if (list.isEmpty()) {
                 logger.info("removing model from database");
@@ -119,7 +119,7 @@ public class CarDatabase {
     public Car update(Car car) {
         if (database.containsKey(car.getModel())) {
             List<Car> cars = database.get(car.getModel());
-            Car saved = this.getCarFromlist(cars, car.getRenavan());
+            Car saved = this.getCarFromList(cars, car.getRenavan());
             cars.remove(saved);
             saved.update(car);
             this.save(saved);

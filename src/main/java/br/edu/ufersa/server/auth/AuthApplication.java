@@ -1,9 +1,8 @@
-package br.edu.ufersa.auth;
+package br.edu.ufersa.server.auth;
 
-import br.edu.ufersa.auth.domain.User;
-import br.edu.ufersa.auth.domain.UserAuthorities;
+import br.edu.ufersa.server.auth.domain.User;
+import br.edu.ufersa.server.auth.domain.UserAuthorities;
 
-import javax.swing.*;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;

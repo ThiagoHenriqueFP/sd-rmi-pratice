@@ -1,9 +1,9 @@
 package br.edu.ufersa.client;
 
-import br.edu.ufersa.auth.domain.User;
-import br.edu.ufersa.server.GatewayRemote;
-import br.edu.ufersa.server.domain.Car;
-import br.edu.ufersa.server.domain.CarCategory;
+import br.edu.ufersa.server.auth.domain.User;
+import br.edu.ufersa.server.gateway.GatewayRemote;
+import br.edu.ufersa.server.gateway.domain.Car;
+import br.edu.ufersa.server.gateway.domain.CarCategory;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -114,7 +114,6 @@ public class Main {
                         else System.out.println("erro ao deletar modelos");
                     }
                     case "4" -> {
-                        CarCategory category;
                         int index;
 
                         System.out.println("informe a categoria [0: ECONOMY, 1: INTERMEDIARY, 2: EXCLUSIVE]");
@@ -180,9 +179,7 @@ public class Main {
                             System.out.println("carro atualizado\n" + carAlreadyExists.get());
                         } else System.out.println("carro nao encontrado na base de dados");
                     }
-                    case "9" -> {
-                        System.out.println("qtd carros em estoque: " + gatewayStub.carsInStock());
-                    }
+                    case "9" -> System.out.println("qtd carros em estoque: " + gatewayStub.carsInStock());
                     case "10" -> { String model, renavan;
 
                         System.out.println("informe o modelo");

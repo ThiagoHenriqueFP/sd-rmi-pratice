@@ -1,6 +1,6 @@
-package br.edu.ufersa;
+package br.edu.ufersa.server;
 
-import br.edu.ufersa.server.GatewayApplication;
+import br.edu.ufersa.server.gateway.GatewayApplication;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
