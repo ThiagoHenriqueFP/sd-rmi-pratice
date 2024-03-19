@@ -3,8 +3,10 @@ package br.edu.ufersa.server.gateway;
 import br.edu.ufersa.server.auth.AuthApplication;
 import br.edu.ufersa.server.auth.AuthApplicationRemote;
 import br.edu.ufersa.server.auth.domain.User;
+import br.edu.ufersa.server.auth.exception.UserNotFoundException;
 import br.edu.ufersa.server.gateway.domain.Car;
 import br.edu.ufersa.server.gateway.domain.CarCategory;
+import br.edu.ufersa.server.gateway.exception.PermissionNotAllowedException;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.NotBoundException;
@@ -13,10 +15,9 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Logger;
 
-public class GatewayApplication implements GatewayRemote {
+public class GatewayApplication implements GatewayCommonRemote, GatewayEmployeeRemote {
     private static final Logger logger = Logger.getLogger(GatewayApplication.class.getName());
     private final CarDatabase database = new CarDatabase();
     private final AuthApplicationRemote authStub;
@@ -27,7 +28,7 @@ public class GatewayApplication implements GatewayRemote {
             try {
                 INSTANCE = new GatewayApplication();
 
-                GatewayRemote skeleton = (GatewayRemote) UnicastRemoteObject.exportObject(INSTANCE, 0);
+                GatewayCommonRemote skeleton = (GatewayCommonRemote) UnicastRemoteObject.exportObject(INSTANCE, 0);
                 Registry registry = LocateRegistry.getRegistry();
                 registry.bind("gateway", skeleton);
                 logger.info("gateway registered to registry");
@@ -53,25 +54,9 @@ public class GatewayApplication implements GatewayRemote {
     }
 
     @Override
-    public Optional<User> login(String username, String password) throws RemoteException {
+    public User login(String username, String password) throws RemoteException, UserNotFoundException {
         logger.info("accessing auth application");
         return authStub.login(username, password);
-    }
-
-    @Override
-    public boolean createCar(String renavam, String name, CarCategory category, Integer fabrication, Double price) {
-        Car car = new Car(name, category, renavam, fabrication, price);
-
-        return database.save(car);
-    }
-
-    @Override
-    public boolean deleteCar(String model, String renavan) throws RemoteException {
-        return database.delete(model, renavan);
-    }
-    @Override
-    public boolean deleteCar(String model) throws RemoteException {
-        return database.delete(model);
     }
 
     @Override
@@ -90,14 +75,10 @@ public class GatewayApplication implements GatewayRemote {
     }
 
     @Override
-    public Optional<Car> searchCar(String model, String renavan) {
+    public Car searchCar(String model, String renavan) {
         return database.search(model, renavan);
     }
 
-    @Override
-    public Car update(Car car) {
-        return database.update(car);
-    }
 
     @Override
     public Integer carsInStock() {
@@ -105,7 +86,33 @@ public class GatewayApplication implements GatewayRemote {
     }
 
     @Override
-    public Optional<Car> buy(String model, String renavan) {
+    public Car buy(String model, String renavan) {
         return database.buy(model, renavan);
+    }
+
+    @Override
+    public Car update(Car car, User user) throws RemoteException {
+        if(authStub.isEmployee(user)) return database.update(car);
+        throw new PermissionNotAllowedException();
+    }
+
+    @Override
+    public boolean createCar(String renavam, String name, CarCategory category, Integer fabrication, Double price, User user) throws RemoteException {
+        Car car = new Car(name, category, renavam, fabrication, price);
+
+        if(authStub.isEmployee(user)) return database.save(car);
+        throw new PermissionNotAllowedException();
+    }
+
+    @Override
+    public boolean deleteCar(String model, String renavan, User user) throws RemoteException {
+        if(authStub.isEmployee(user)) return database.delete(model, renavan);
+        throw new PermissionNotAllowedException();
+    }
+
+    @Override
+    public boolean deleteCar(String model, User user) throws RemoteException {
+        if(authStub.isEmployee(user)) return database.delete(model);
+        throw new PermissionNotAllowedException();
     }
 }

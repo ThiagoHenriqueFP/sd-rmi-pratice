@@ -66,4 +66,15 @@ public class Car implements Serializable {
         this.year = car.getYear();
         this.price = car.getPrice();
     }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "model='" + model + '\'' +
+                ", renavan='" + renavan + '\'' +
+                ", category=" + category +
+                ", year=" + year +
+                ", price=" + price +
+                '}';
+    }
 }

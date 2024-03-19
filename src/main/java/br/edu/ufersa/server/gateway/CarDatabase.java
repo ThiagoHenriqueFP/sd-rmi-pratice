@@ -2,6 +2,7 @@ package br.edu.ufersa.server.gateway;
 
 import br.edu.ufersa.server.gateway.domain.Car;
 import br.edu.ufersa.server.gateway.domain.CarCategory;
+import br.edu.ufersa.server.gateway.exception.ResourceNotFoundException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +13,30 @@ import java.util.logging.Logger;
 public class CarDatabase {
     private static final Logger logger = Logger.getLogger(CarDatabase.class.getName());
     private final HashMap<String, List<Car>> database = new HashMap<>();
+
+    public CarDatabase() {
+        logger.info("filling database");
+        database.put("kwid", new ArrayList<>(){{
+            add(new Car("kwid", CarCategory.ECONOMY, "0123", 2021, 48000.0));
+            add(new Car("kwid", CarCategory.ECONOMY, "0121", 2023, 60000.0));
+            add(new Car("kwid", CarCategory.ECONOMY, "0122", 2021, 53000.0));
+            add(new Car("kwid", CarCategory.ECONOMY, "0124", 2022, 58000.0));
+        }});
+
+        database.put("civic", new ArrayList<>(){{
+            add(new Car("civic", CarCategory.INTERMEDIARY, "0224", 2023, 210000.0));
+            add(new Car("civic", CarCategory.INTERMEDIARY, "0223", 2024, 230000.0));
+            add(new Car("civic", CarCategory.INTERMEDIARY, "0222", 2024, 270000.0));
+            add(new Car("civic", CarCategory.INTERMEDIARY, "0221", 2001, 21000.0));
+        }});
+
+        database.put("sw4", new ArrayList<>(){{
+            add(new Car("sw4", CarCategory.EXCLUSIVE, "0323", 2024, 500000.0));
+            add(new Car("sw4", CarCategory.EXCLUSIVE, "0322", 2024, 500000.0));
+            add(new Car("sw4", CarCategory.EXCLUSIVE, "0321", 2024, 500000.0));
+            add(new Car("sw4", CarCategory.EXCLUSIVE, "0320", 2024, 500000.0));
+        }});
+    }
 
     private boolean renavanAlreadyExists(List<Car> list, String renavan) {
         return list.stream().anyMatch(it -> it.getRenavan().equals(renavan));
@@ -30,6 +55,7 @@ public class CarDatabase {
             }};
 
             database.put(key, list);
+            return true;
         }
 
         List<Car> list = database.get(key);
@@ -40,6 +66,8 @@ public class CarDatabase {
             logger.severe("renavan " + car.getRenavan() + " already exists");
             return false;
         }
+
+        list.add(car);
 
         logger.info("car successfully saved in database");
         return true;
@@ -106,14 +134,16 @@ public class CarDatabase {
         return new ArrayList<>();
     }
 
-    public Optional<Car> search(String model, String renavan) {
+    public Car search(String model, String renavan) {
         if (database.containsKey(model)) {
             var cars = database.get(model);
 
-            return cars.stream().filter(it -> it.getRenavan().equals(renavan)).findFirst();
+            var car = cars.stream().filter(it -> it.getRenavan().equals(renavan)).findFirst();
+            if (car.isPresent())
+                return car.get();
         }
 
-        return Optional.empty();
+        throw new ResourceNotFoundException();
     }
 
     public Car update(Car car) {
@@ -129,16 +159,18 @@ public class CarDatabase {
         return null;
     }
 
-    public Optional<Car> buy(String model, String renavan) {
+    public Car buy(String model, String renavan) {
         if (database.containsKey(model)) {
             var cars = database.get(model);
 
             var car = cars.stream().filter(it -> it.getRenavan().equals(renavan)).findFirst();
-            cars.remove(car.get());
+            if (car.isPresent()) {
+                cars.remove(car.get());
 
-            return car;
+                return car.get();
+            }
         }
 
-        return Optional.empty();
+        throw new ResourceNotFoundException();
     }
 }
